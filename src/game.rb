@@ -15,25 +15,30 @@ module Game
   
 
   def main(stdout = $stdout)
-    
-    daimaou_count_init
-    # stdout.puts "大魔王まで：#{@@daimaou_count}"
-    hero = Hero.new(hp: 10, ap: 6)
-    while true do
-      if @@count == 5
-        enemy = Enemy.new(name: "大魔王", hp: 20, ap: 9)
-        @@daimaou_f = true
-      else
-        enemy_name = @@enemy_names.sample
-        enemy = Enemy.new(name: enemy_name, hp: 10, ap: 4)
+    catch(:exit) do
+      daimaou_count_init
+      # stdout.puts "大魔王まで：#{@@daimaou_count}"
+      hero = Hero.new(hp: 10, ap: 6)
+      while true do
+        if @@count == 5
+          enemy = Enemy.new(name: "大魔王", hp: 20, ap: 9)
+          @@daimaou_f = true
+        else
+          enemy_name = @@enemy_names.sample
+          enemy = Enemy.new(name: enemy_name, hp: 10, ap: 4)
+          enemy.add_status(count: @@count)
+        end
+        result = battle(stdout: stdout, enemy: enemy, hero: hero)
+        game_over(stdout: stdout, hero: hero) unless result
       end
-      battle(stdout: stdout, enemy: enemy, hero: hero)
     end
+    stdout.puts "ゲームクリア"
   end
 
   def daimaou_count_init
     prng = Random.new
     @@count = 0
+    @@daimaou_f = false
     @@daimaou_count = prng.rand(5..9)
   end
 
@@ -83,7 +88,7 @@ module Game
         break if out
       end
       if escape_f
-        return 
+        return true
       end
 
       if enemy.hp <= 0
@@ -93,19 +98,19 @@ module Game
       hero.damage(damage: enemy.ap)
       stdout.puts damage_message(attacker: enemy, diffence: hero)
       if hero.hp <= 0
-        game_over(stdout: stdout, hero: hero)
-        return
+        return false
       end
     end
     @@count += 1
     if @@daimaou_f
       stdout.puts "世界は平和になった！"
-      @@daimaou_f = false
       daimaou_count_init
+      throw :exit
     end
     hero.level_up
     stdout.puts "勇者はレベルアップした！"
     stdout.puts ""
+    return true
   end
 
   def battle_command(stdout:, enemy:, hero:, input:)
