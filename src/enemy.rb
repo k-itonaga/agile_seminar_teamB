@@ -5,7 +5,6 @@ class Enemy < Character
 
   def initialize(name:, hp:, ap:)
     @name = name
-    @hp = hp
-    @ap = ap
-  end  
+    super hp: hp, ap: ap
+  end
 end
