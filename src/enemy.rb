@@ -1,4 +1,4 @@
-require './character'
+require 'character'
 
 class Enemy < Character
   attr_reader :name

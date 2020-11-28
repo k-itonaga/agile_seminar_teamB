@@ -1,4 +1,4 @@
-require './character'
+require 'character'
 
 class Hero < Character
   attr_reader :name
