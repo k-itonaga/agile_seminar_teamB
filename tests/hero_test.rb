@@ -1,6 +1,4 @@
-require 'minitest/autorun'
-require './src/character'
-require './src/hero'
+require './tests/test_helper'
 
 class HeroTest < Minitest::Test
   def test_hp

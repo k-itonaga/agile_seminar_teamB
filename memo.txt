@@ -36,7 +36,8 @@ HPがゼロになったらイベント
 
 
 
-
+テスト方法
+$ rake test
 
 ruby -I src tests/game_test.rb 
 

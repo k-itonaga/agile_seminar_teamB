@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+$LOAD_PATH.unshift File.expand_path('../src', __dir__)
+Dir["./src/*.rb"].each {|file| require file }
 
 require 'minitest/autorun'
-require './src/character'
-require './src/hero'
 require 'stringio'
-require './src/enemy'
-require './src/game'

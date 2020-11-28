@@ -1,5 +1,4 @@
-require 'minitest/autorun'
-require './src/character'
+require './tests/test_helper'
 
 class CharacterTest < Minitest::Test
 

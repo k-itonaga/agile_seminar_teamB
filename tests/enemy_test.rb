@@ -1,6 +1,4 @@
-require 'minitest/autorun'
-require './src/character'
-require './src/enemy'
+require './tests/test_helper'
 
 class EnemyTest < Minitest::Test
   def test_name
