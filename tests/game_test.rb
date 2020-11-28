@@ -15,6 +15,25 @@ class GameTest < Minitest::Test
 #    HERE
 #  end
 
+  def test_gameover
+    # 一時的に$stdinを置き換えて、Game.game_overの中の入力を制御する
+    @original_stdin = $stdin
+    $stdin = StringIO.new("y\n")
+
+    stdout = StringIO.new
+    Game.game_over(stdout: stdout, hero: Hero.new(hp: 10, ap: 10))
+
+    # 出力の確認
+    assert_equal <<~HERE, stdout.string
+      勇者は倒れた
+
+      立ち上がりますか？[y/n]
+    HERE
+  ensure
+    # $stdinの置き換えを戻す
+    $stdin = @original_stdin
+  end
+
   def test_encount
     assert_equal "ゴブリンがあらわれた！", Game.encount(Enemy.new(name: 'ゴブリン', hp: 10, ap: 3))
   end
