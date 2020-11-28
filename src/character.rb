@@ -1,5 +1,5 @@
 class Character
-  attr_reader :hp, :ap
+  attr_reader :hp, :ap, :max_hp
   
   def initialize(hp:, ap:)
     @hp = hp

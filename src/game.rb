@@ -8,16 +8,33 @@ require 'hero'
 module Game
   module_function
 
+  @@count = 0
+  @@daimaou_f = false
+  @@daimaou_count = 1
+  @@enemy_names = ['スライム', 'ゴブリン', 'ドラキー', 'ドラゴン']
+  
+
   def main(stdout = $stdout)
-    count = 0
-    enemy_name = 'スライムA'
+    
+    daimaou_count_init
+    # stdout.puts "大魔王まで：#{@@daimaou_count}"
     hero = Hero.new(hp: 10, ap: 6)
     while true do
-      enemy = Enemy.new(name: enemy_name, hp: 10, ap: 9)
+      if @@count == 5
+        enemy = Enemy.new(name: "大魔王", hp: 20, ap: 9)
+        @@daimaou_f = true
+      else
+        enemy_name = @@enemy_names.sample
+        enemy = Enemy.new(name: enemy_name, hp: 10, ap: 4)
+      end
       battle(stdout: stdout, enemy: enemy, hero: hero)
-      count += 1
-      enemy_name = enemy_name.next
     end
+  end
+
+  def daimaou_count_init
+    prng = Random.new
+    @@count = 0
+    @@daimaou_count = prng.rand(5..9)
   end
 
   def encount(enemy)
@@ -25,32 +42,23 @@ module Game
   end
 
   def damage_message(attacker:, diffence:)
-    if attacker.name.nil?
-      name = '勇者' 
-    else
-      name = attacker.name
-    end
-
-    "#{name}の攻撃　#{diffence.name}の残りHP：#{diffence.hp}"
+    name = attacker.name.nil? ? '勇者' : attacker.name
+    name_d = diffence.name.nil? ? '勇者' : diffence.name
+    "#{name}の攻撃　#{name_d}の残りHP：#{diffence.hp}"
   end
-  def heal_message(attacker:)
-    if attacker.name.nil?
-      name = '勇者' 
-    else
-      name = attacker.name
-    end
 
+  def heal_message(attacker:)
+    name = attacker.name.nil? ? '勇者' : attacker.name
     "#{name}を回復した　#{name}の残りHP：#{attacker.hp}"
   end
 
   def escape_message(attacker:)
-    if attacker.name.nil?
-      name = '勇者' 
-    else
-      name = attacker.name
-    end
-
+    name = attacker.name.nil? ? '勇者' : attacker.name
     "#{name}は逃げ出した"
+  end
+
+  def battle_status_message(enemy:, hero:)
+    "勇者のHP：#{hero.hp}    #{enemy.name}のHP：#{enemy.hp}"
   end
 
   def game_over(stdout:, hero:)
@@ -58,15 +66,16 @@ module Game
     stdout.puts ""
     while true do
       stdout.puts "立ち上がりますか？[y/n]"
-      input = gets.chomp
-      break if input == "y"
-      hero.heal(heal: 100) 
+      break if gets.chomp == "y"
     end
+    daimaou_count_init
+    hero.heal(heal: 100)
   end
 
   def battle(stdout:, enemy:, hero:)
     stdout.puts encount(enemy)
     while true do
+      stdout.puts battle_status_message(enemy: enemy, hero: hero)
       stdout.puts '入力してください　攻撃 [a] 回復[h] 逃げる [e]'
       while true do
         input = gets.chomp
@@ -88,6 +97,12 @@ module Game
         return
       end
     end
+    @@count += 1
+    if @@daimaou_f
+      stdout.puts "世界は平和になった！"
+      @@daimaou_f = false
+      daimaou_count_init
+    end
     hero.level_up
     stdout.puts "勇者はレベルアップした！"
     stdout.puts ""
@@ -108,6 +123,7 @@ module Game
       return true, true
       # 逃げる
     end
+    return false, false
   end
 
   # yが入力されたらtrueを返す

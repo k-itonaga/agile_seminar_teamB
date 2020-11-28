@@ -10,6 +10,7 @@ class Hero < Character
   end
   def level_up
     @hp += 1
+    @max_hp += 1
     @ap += 1
   end
 end

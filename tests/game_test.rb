@@ -26,6 +26,13 @@ class GameTest < Minitest::Test
     assert_equal "勇者の攻撃　スライムの残りHP：4", Game.damage_message(attacker: hero,diffence: enemy)
   end
 
+  def test_battle_status_message
+    enemy = Enemy.new(name: 'スライム', hp: 10, ap: 3)
+    hero = Hero.new(hp: 10, ap: 6)
+    assert_equal "勇者のHP：10    スライムのHP：10", Game.battle_status_message(enemy: enemy, hero: hero)
+
+  end
+
   def prepare_input(input)
     StringIO.new(input, 'r')
   end
