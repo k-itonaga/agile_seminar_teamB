@@ -12,8 +12,7 @@ class Location
 
   def initialize(x_in = nil, y_in = nil)
     if x_in && y_in
-      @x = x_in
-      @y = y_in
+      set(x_in, y_in)
     else
       rand
     end

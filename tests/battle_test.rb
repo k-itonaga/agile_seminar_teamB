@@ -1,8 +1,8 @@
 require './tests/test_helper'
 
 class BattleTest < Minitest::Test
-  def test_encount
-    assert_equal "ゴブリンがあらわれた！", Battle.encount(Enemy.new(name: 'ゴブリン', hp: 10, ap: 3))
+  def test_encount_message
+    assert_equal "ゴブリンがあらわれた！", Battle.encount_message(Enemy.new(name: 'ゴブリン', hp: 10, ap: 3))
   end
 
   def test_damage_message

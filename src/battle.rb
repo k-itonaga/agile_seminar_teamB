@@ -1,7 +1,7 @@
 module Battle
   module_function
 
-  def encount(enemy)
+  def encount_message(enemy)
     "#{enemy.name}があらわれた！"
   end
 
@@ -26,7 +26,7 @@ module Battle
   end
 
   def start(stdout:, enemy:, hero:, flag: false)
-    stdout.puts encount(enemy)
+    stdout.puts encount_message(enemy)
     while true do
       stdout.puts battle_status_message(enemy: enemy, hero: hero)
       stdout.puts '入力してください　攻撃 [a] 回復[h] 逃げる [e]'
