@@ -3,6 +3,7 @@ require 'stringio'
 require 'character'
 require 'enemy'
 require 'hero'
+require 'location'
 
 
 module Game
